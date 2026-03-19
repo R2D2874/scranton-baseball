@@ -814,7 +814,7 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
     <div class="hero-inner">
         <div class="hero-top">
             <div>
-                <h1>Scranton Royals Baseball</h1>
+                <h1>Conor / Scranton Royals Baseball</h1>
                 <div class="subtitle">2026 Season</div>
             </div>
             <div class="record-block">
