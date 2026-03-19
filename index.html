@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scranton Royals Baseball 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        :root {
+            --purple: #4B2E83;
+            --purple-dark: #3A2368;
+            --purple-light: #7B5FB8;
+            --gold: #D4A843;
+            --gold-light: #F0D78C;
+            --bg: #0F0F13;
+            --surface: #1A1A22;
+            --surface-2: #22222E;
+            --surface-3: #2A2A38;
+            --border: #2E2E3A;
+            --text: #E8E8ED;
+            --text-muted: #8888A0;
+            --green: #34D399;
+            --green-bg: rgba(52, 211, 153, 0.1);
+            --red: #F87171;
+            --red-bg: rgba(248, 113, 113, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Hero --- */
+        .hero {
+            background: linear-gradient(160deg, var(--purple-dark) 0%, var(--purple) 40%, var(--purple-light) 100%);
+            padding: 3rem 2rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(212,168,67,0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .hero h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: white;
+        }
+        .hero .subtitle {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+            margin-top: 0.15rem;
+        }
+        .record-block {
+            text-align: right;
+        }
+        .record-num {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--gold);
+            line-height: 1;
+            letter-spacing: -0.03em;
+        }
+        .record-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.5);
+        }
+        .updated {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.35);
+            margin-top: 1rem;
+        }
+
+        /* --- Nav --- */
+        .nav {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0;
+        }
+        .nav a {
+            padding: 0.85rem 1.25rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .nav a:hover, .nav a.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+
+        /* --- Container --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* --- Section --- */
+        .section {
+            padding: 2rem 0;
+        }
+        .section + .section {
+            border-top: 1px solid var(--border);
+        }
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+        .sub-heading {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        /* --- Stat grid --- */
+        .stat-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            min-width: 72px;
+        }
+        .stat-big {
+            background: var(--surface-2);
+            border-color: var(--purple);
+        }
+        .stat-big .stat-val {
+            font-size: 1.5rem;
+            color: var(--gold);
+        }
+        .stat-val {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.15rem;
+        }
+
+        /* --- Tables --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+        thead th {
+            background: var(--surface-2);
+            color: var(--text-muted);
+            padding: 0.5rem 0.65rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            border-bottom: 1px solid var(--border);
+        }
+        td {
+            padding: 0.55rem 0.65rem;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        tbody tr:hover {
+            background: var(--surface);
+        }
+
+        /* --- Schedule table --- */
+        .sched-date {
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            width: 80px;
+        }
+        .sched-opp {
+            font-weight: 600;
+        }
+        .sched-result {
+            width: 120px;
+        }
+        .sched-box {
+            width: 80px;
+            text-align: right;
+        }
+        .box-link {
+            color: var(--purple-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.78rem;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+        .box-link:hover {
+            background: var(--purple);
+            color: white;
+            border-color: var(--purple);
+        }
+
+        /* --- Badges --- */
+        .badge-w {
+            display: inline-block;
+            background: var(--green-bg);
+            color: var(--green);
+            font-weight: 700;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            margin-right: 0.3rem;
+        }
+        .badge-l {
+            display: inline-block;
+            background: var(--red-bg);
+            color: var(--red);
+            font-weight: 700;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            margin-right: 0.3rem;
+        }
+        .badge-upcoming {
+            display: inline-block;
+            background: var(--surface-2);
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        /* --- Game log --- */
+        .game-log { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .game-log thead th { background: var(--surface-3); }
+        .game-row { cursor: pointer; transition: background 0.15s; }
+        .game-row:hover { background: var(--surface-2); }
+        .game-row.w { border-left: 3px solid var(--green); }
+        .game-row.l { border-left: 3px solid var(--red); }
+        .gl-date { color: var(--text-muted); font-size: 0.78rem; }
+        .gl-opp { font-weight: 600; }
+
+        .plays-row {
+            display: none;
+        }
+        .game-row.expanded + .plays-row {
+            display: table-row;
+        }
+        .plays-wrap {
+            padding: 0.5rem 0.25rem;
+        }
+        .play {
+            padding: 0.3rem 0;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .inning-tag {
+            display: inline-block;
+            background: var(--surface-3);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            margin-right: 0.35rem;
+            min-width: 28px;
+            text-align: center;
+        }
+
+        /* --- Campbell highlight in team tables --- */
+        tr.campbell td {
+            background: rgba(75, 46, 131, 0.15);
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .empty {
+            color: var(--text-muted);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        footer {
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            border-top: 1px solid var(--border);
+            margin-top: 1rem;
+        }
+        footer a { color: var(--purple-light); text-decoration: none; }
+
+        @media (max-width: 700px) {
+            .hero { padding: 2rem 1.25rem 1.5rem; }
+            .hero h1 { font-size: 1.2rem; }
+            .record-num { font-size: 2rem; }
+            .stat-card { min-width: 60px; padding: 0.5rem 0.6rem; }
+            .stat-big .stat-val { font-size: 1.2rem; }
+            table { font-size: 0.75rem; }
+            td, th { padding: 0.4rem 0.45rem; }
+            .nav a { padding: 0.7rem 0.8rem; font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="hero-inner">
+        <div class="hero-top">
+            <div>
+                <h1>Scranton Royals Baseball</h1>
+                <div class="subtitle">2026 Season</div>
+            </div>
+            <div class="record-block">
+                <div class="record-num">10-4</div>
+                <div class="record-label">Record</div>
+            </div>
+        </div>
+        <div class="updated">Updated March 18, 2026 at 10:32 PM</div>
+    </div>
+</div>
+
+<div class="nav">
+    <div class="nav-inner">
+        <a href="#campbell" class="active">Campbell</a>
+        <a href="#schedule">Schedule</a>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Campbell Section -->
+    <div class="section" id="campbell">
+        <div class="section-title">#14 Conor Campbell</div>
+
+        <h3 class="sub-heading">2026 Season Hitting</h3>
+        <div class="stat-grid"><div class="stat-card stat-big"><div class="stat-val">.375</div><div class="stat-label">AVG</div></div>
+<div class="stat-card stat-big"><div class="stat-val">.877</div><div class="stat-label">OPS</div></div>
+<div class="stat-card stat-big"><div class="stat-val">21</div><div class="stat-label">H</div></div>
+<div class="stat-card stat-big"><div class="stat-val">15</div><div class="stat-label">R</div></div>
+<div class="stat-card stat-big"><div class="stat-val">11</div><div class="stat-label">RBI</div></div>
+<div class="stat-card stat-small"><div class="stat-val">3</div><div class="stat-label">2B</div></div>
+<div class="stat-card stat-small"><div class="stat-val">0</div><div class="stat-label">3B</div></div>
+<div class="stat-card stat-small"><div class="stat-val">0</div><div class="stat-label">HR</div></div>
+<div class="stat-card stat-small"><div class="stat-val">8</div><div class="stat-label">BB</div></div>
+<div class="stat-card stat-small"><div class="stat-val">1-1</div><div class="stat-label">SB-ATT</div></div>
+<div class="stat-card stat-small"><div class="stat-val">6</div><div class="stat-label">SO</div></div>
+<div class="stat-card stat-small"><div class="stat-val">.429</div><div class="stat-label">SLG%</div></div>
+<div class="stat-card stat-small"><div class="stat-val">.448</div><div class="stat-label">OB%</div></div>
+<div class="stat-card stat-small"><div class="stat-val">14-14</div><div class="stat-label">GP-GS</div></div>
+<div class="stat-card stat-small"><div class="stat-val">56</div><div class="stat-label">AB</div></div>
+</div>
+
+        
+        <h3 class="sub-heading">Fielding</h3>
+        <div class="stat-grid"><div class="stat-card stat-small"><div class="stat-val">.971</div><div class="stat-label">FLD%</div></div>
+<div class="stat-card stat-small"><div class="stat-val">33</div><div class="stat-label">PO</div></div>
+<div class="stat-card stat-small"><div class="stat-val">1</div><div class="stat-label">A</div></div>
+<div class="stat-card stat-small"><div class="stat-val">1</div><div class="stat-label">E</div></div>
+<div class="stat-card stat-small"><div class="stat-val">35</div><div class="stat-label">C</div></div>
+</div>
+
+        <h3 class="sub-heading">Game Log <span style="font-weight:400; color: var(--text-muted); font-size: 0.75rem; text-transform: none; letter-spacing: 0;">(click a game for play-by-play)</span></h3>
+        
+        <table class="game-log">
+            <thead><tr><th>Date</th><th>Opponent</th><th>Result</th><th>AB</th><th>R</th><th>H</th><th>RBI</th><th>BB</th><th>SO</th><th>SB</th><th>CS</th><th>HBP</th><th>2B</th><th>3B</th><th>HR</th></tr></thead>
+            <tbody>
+            <tr class="game-row l" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Feb 21</td>
+                <td class="gl-opp">Arcadia University</td>
+                <td class="gl-result"><span class="badge-l">L</span> 3-11</td>
+                <td>4</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row l">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> C. Campbell grounded out to ss; A. Casey advanced to third.</div>
+<div class="play"><span class="inning-tag">3rd</span> C. Campbell fouled out to 2b.</div>
+<div class="play"><span class="inning-tag">5th</span> C. Campbell singled to left center, RBI; M. Gannon advanced to third; A. Casey scored.</div>
+<div class="play"><span class="inning-tag">5th</span> J. Granko singled to right center, RBI; C. Campbell advanced to third; M. Gannon scored.</div>
+<div class="play"><span class="inning-tag">5th</span> L. Mason singled to center field, RBI; J. Granko advanced to third; C. Campbell scored.</div>
+<div class="play"><span class="inning-tag">6th</span> C. Campbell walked; M. Gannon advanced to second; A. Casey advanced to third.</div>
+<div class="play"><span class="inning-tag">9th</span> C. Campbell grounded out to 2b.</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row w" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Feb 25</td>
+                <td class="gl-opp">Marywood University</td>
+                <td class="gl-result"><span class="badge-w">W</span> 9-4</td>
+                <td>5</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row w">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> C. Campbell singled up the middle, RBI; J. Heitzman scored.</div>
+<div class="play"><span class="inning-tag">1st</span> J. Granko hit by pitch; C. Campbell advanced to second.</div>
+<div class="play"><span class="inning-tag">1st</span> L. Mason hit by pitch; J. Granko advanced to second; C. Campbell advanced to third.</div>
+<div class="play"><span class="inning-tag">1st</span> J. Lundari doubled to right field, 3 RBI; L. Mason scored; J. Granko scored; C. Campbell scored.</div>
+<div class="play"><span class="inning-tag">2nd</span> C. Campbell flied out to lf.</div>
+<div class="play"><span class="inning-tag">4th</span> C. Campbell grounded out to p, bunt.</div>
+<div class="play"><span class="inning-tag">6th</span> C. Campbell lined out to 2b.</div>
+<div class="play"><span class="inning-tag">8th</span> C. Campbell reached on a fielder&#x27;s choice; J. Heitzman out at second 2b unassisted.</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row l" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Feb 28</td>
+                <td class="gl-opp">Washington &amp; Jefferson College</td>
+                <td class="gl-result"><span class="badge-l">L</span> 6-8</td>
+                <td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row l">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> C. Campbell grounded out to ss; A. Casey advanced to third.</div>
+<div class="play"><span class="inning-tag">4th</span> C. Campbell reached first on an error by ss; J. Cassella advanced to second.</div>
+<div class="play"><span class="inning-tag">4th</span> J. Heitzman reached on a fielder&#x27;s choice to second base; C. Campbell out at second 2b to ss; J. Cassella advanced to third.</div>
+<div class="play"><span class="inning-tag">6th</span> C. Campbell grounded out to ss.</div>
+<div class="play"><span class="inning-tag">7th</span> C. Campbell struck out looking.</div>
+<div class="play"><span class="inning-tag">9th</span> C. Campbell grounded into double play 2b to ss to 1b; J. Cassella out on the play.</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row w" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Feb 28</td>
+                <td class="gl-opp">Case Western Reserve University</td>
+                <td class="gl-result"><span class="badge-w">W</span> 11-6</td>
+                <td>5</td><td>2</td><td>3</td><td>2</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row w">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> C. Campbell singled up the middle; M. Gannon advanced to second.</div>
+<div class="play"><span class="inning-tag">1st</span> C. Campbell advanced to second on a wild pitch; M. Gannon advanced to third; A. Casey out at home c to p.</div>
+<div class="play"><span class="inning-tag">1st</span> C. Campbell advanced to third; M. Gannon scored on a wild pitch.</div>
+<div class="play"><span class="inning-tag">1st</span> J. Granko singled, RBI; J. Heitzman advanced to second; C. Campbell scored.</div>
+<div class="play"><span class="inning-tag">2nd</span> C. Campbell walked.</div>
+<div class="play"><span class="inning-tag">2nd</span> J. Heitzman singled to pitcher; C. Campbell advanced to second.</div>
+<div class="play"><span class="inning-tag">3rd</span> C. Campbell grounded out to 1b unassisted.</div>
+<div class="play"><span class="inning-tag">5th</span> C. Campbell reached on a fielder&#x27;s choice; M. Gannon out at second ss to 2b.</div>
+<div class="play"><span class="inning-tag">7th</span> C. Campbell singled to right field, RBI; A. Casey scored.</div>
+<div class="play"><span class="inning-tag">7th</span> J. Heitzman singled, advanced to second on the throw; C. Campbell advanced to third.</div>
+<div class="play"><span class="inning-tag">8th</span> C. Campbell singled to third base, RBI; M. Gannon advanced to third; A. Casey advanced to third, scored on a throwing error by 3b, unearned; J. Cassella scored.</div>
+<div class="play"><span class="inning-tag">8th</span> J. Heitzman singled, 2 RBI; C. Campbell scored; M. Gannon scored.</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row w" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 4</td>
+                <td class="gl-opp">Ithaca College</td>
+                <td class="gl-result"><span class="badge-w">W</span> 12-11</td>
+                <td>5</td><td>0</td><td>2</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row w">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> Conor Campbell flied out to lf (1-2 BK).</div>
+<div class="play"><span class="inning-tag">2nd</span> Conor Campbell singled to third base, RBI (1-2 BK); Aidan Casey advanced to second; Vincent Napolitano scored.</div>
+<div class="play"><span class="inning-tag">3rd</span> Conor Campbell singled to left field, RBI (3-2 BBKFB); Deuce Rzucidlo advanced to second; Jimmy Lundari advanced to third; Vincent Napolitano scored.</div>
+<div class="play"><span class="inning-tag">3rd</span> John Heitzman reached first on an error by 2b, RBI, advanced to second on the throw (1-2 BK); Conor Campbell advanced to third; Deuce Rzucidlo scored, unearned; Jimmy Lundari scored.</div>
+<div class="play"><span class="inning-tag">4th</span> Conor Campbell hit by pitch (2-1 FBH).</div>
+<div class="play"><span class="inning-tag">4th</span> John Heitzman reached on a fielder&#x27;s choice (0-1); Conor Campbell out at second 1b to ss; Aidan Casey advanced to third.</div>
+<div class="play"><span class="inning-tag">7th</span> Conor Campbell grounded out to ss (0-2 K).</div>
+<div class="play"><span class="inning-tag">8th</span> Conor Campbell reached on a fielder&#x27;s choice (1-2 BK); Aidan Casey out at second 2b unassisted.</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row w" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 6</td>
+                <td class="gl-opp">Muhlenberg College</td>
+                <td class="gl-result"><span class="badge-w">W</span> 7-3</td>
+                <td>3</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row w">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> Conor Campbell flied out to cf (2-1 KBB).</div>
+<div class="play"><span class="inning-tag">3rd</span> Conor Campbell walked (3-1 BKBBB); Jared Cassella advanced to second; Aidan Casey advanced to third.</div>
+<div class="play"><span class="inning-tag">3rd</span> John Heitzman grounded out to 2b, RBI (0-2 KK); Conor Campbell advanced to second; Jared Cassella advanced to third; Aidan Casey scored.</div>
+<div class="play"><span class="inning-tag">5th</span> Conor Campbell fouled out to 1b (3-1 BBBK).</div>
+<div class="play"><span class="inning-tag">7th</span> Conor Campbell flied out to rf, sacrifice fly, RBI (1-1 KB); Aidan Casey scored.</div>
+<div class="play"><span class="inning-tag">8th</span> Conor Campbell grounded out to ss (1-2 FKBF).</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row l" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 7</td>
+                <td class="gl-opp">William Paterson University (DH)</td>
+                <td class="gl-result"><span class="badge-l">L</span> 8-9</td>
+                <td>4</td><td>2</td><td>3</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row l">
+                <td colspan="15">
+                    <div class="plays-wrap"><em>No play-by-play available</em></div>
+                </td>
+            </tr>
+            <tr class="game-row w" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 7</td>
+                <td class="gl-opp">William Paterson University (DH)</td>
+                <td class="gl-result"><span class="badge-w">W</span> 9-7</td>
+                <td>4</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row w">
+                <td colspan="15">
+                    <div class="plays-wrap"><em>No play-by-play available</em></div>
+                </td>
+            </tr>
+            <tr class="game-row w" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 14</td>
+                <td class="gl-opp">Farmingdale State College (DH)</td>
+                <td class="gl-result"><span class="badge-w">W</span> 6-5</td>
+                <td>3</td><td>2</td><td>2</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row w">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> Conor Campbell walked (3-2 BKSBBB).</div>
+<div class="play"><span class="inning-tag">1st</span> John Heitzman grounded out to p (0-1 F); Conor Campbell advanced to second.</div>
+<div class="play"><span class="inning-tag">1st</span> Conor Campbell advanced to third; Jared Cassella scored on a passed ball.</div>
+<div class="play"><span class="inning-tag">1st</span> Joey Granko singled to right field, RBI (0-1 K); Matthew Gannon advanced to third; Conor Campbell scored.</div>
+<div class="play"><span class="inning-tag">3rd</span> Conor Campbell doubled to right center (1-2 BKK).</div>
+<div class="play"><span class="inning-tag">3rd</span> Matthew Gannon advanced to second on a wild pitch; Conor Campbell advanced to third on a wild pitch.</div>
+<div class="play"><span class="inning-tag">5th</span> Conor Campbell singled to pitcher, bunt (1-0 B).</div>
+<div class="play"><span class="inning-tag">5th</span> Conor Campbell advanced to second on a wild pitch.</div>
+<div class="play"><span class="inning-tag">5th</span> John Heitzman singled to center field (0-0); Conor Campbell advanced to third.</div>
+<div class="play"><span class="inning-tag">5th</span> Joey Granko singled up the middle, 2 RBI (1-0 B); Matthew Gannon advanced to second; John Heitzman scored; Conor Campbell scored.</div>
+<div class="play"><span class="inning-tag">6th</span> Conor Campbell grounded out to ss (3-2 BBSKB).</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row w" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 14</td>
+                <td class="gl-opp">Farmingdale State College (DH)</td>
+                <td class="gl-result"><span class="badge-w">W</span> 13-3</td>
+                <td>1</td><td>1</td><td>0</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row w">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> Conor Campbell walked (3-2 BBKKBB).</div>
+<div class="play"><span class="inning-tag">1st</span> Brayden Keller grounded into double play 2b to ss to 1b (1-0 B); Conor Campbell out on the play.</div>
+<div class="play"><span class="inning-tag">2nd</span> Conor Campbell walked (3-2 KSBBBFB).</div>
+<div class="play"><span class="inning-tag">2nd</span> Brayden Keller singled to second base, RBI (0-1 K); Conor Campbell advanced to second; James Nitti scored.</div>
+<div class="play"><span class="inning-tag">2nd</span> John Heitzman doubled down the rf line, 2 RBI (2-2 BKKB); Brayden Keller scored; Conor Campbell scored.</div>
+<div class="play"><span class="inning-tag">3rd</span> Conor Campbell popped up to 1b (0-0).</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row w" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 15</td>
+                <td class="gl-opp">University of Mount Saint Vincent</td>
+                <td class="gl-result"><span class="badge-w">W</span> 25-6</td>
+                <td>4</td><td>3</td><td>3</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row w">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> Conor Campbell grounded out to p, bunt, SAC (0-0); Aidan Casey advanced to second.</div>
+<div class="play"><span class="inning-tag">2nd</span> Conor Campbell singled, RBI (0-1 K); Aidan Casey advanced to second; Evan Laub advanced to third; Jimmy Lundari scored.</div>
+<div class="play"><span class="inning-tag">2nd</span> Joey Granko walked, advanced to second, 2 RBI (3-0 BBBB); Conor Campbell advanced to third; Aidan Casey scored; Evan Laub scored.</div>
+<div class="play"><span class="inning-tag">2nd</span> Joey Granko advanced to third; Conor Campbell scored.</div>
+<div class="play"><span class="inning-tag">3rd</span> Conor Campbell grounded out to 2b (2-2 BFBKF).</div>
+<div class="play"><span class="inning-tag">5th</span> Conor Campbell singled (1-1 BK); Aidan Casey advanced to second.</div>
+<div class="play"><span class="inning-tag">5th</span> John Heitzman walked (3-2 BBFBFB); Conor Campbell advanced to second; Aidan Casey advanced to third.</div>
+<div class="play"><span class="inning-tag">5th</span> John Heitzman advanced to second on a balk; Conor Campbell advanced to third on a balk; Aidan Casey scored on a balk.</div>
+<div class="play"><span class="inning-tag">5th</span> John Heitzman advanced to third on a wild pitch; Conor Campbell scored on a wild pitch.</div>
+<div class="play"><span class="inning-tag">6th</span> Conor Campbell singled to left field (3-1 BBBK).</div>
+<div class="play"><span class="inning-tag">6th</span> Brandon Prince singled (3-2 BKBFB); Conor Campbell advanced to third.</div>
+<div class="play"><span class="inning-tag">6th</span> Roman Valvano hit by pitch, RBI (1-0 H); Brayden Keller advanced to second; Brandon Prince advanced to third; Conor Campbell scored.</div>
+<div class="play"><span class="inning-tag">6th</span> Will Hunsinger pinch hit for Conor Campbell.</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row w" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 16</td>
+                <td class="gl-opp">Babson College</td>
+                <td class="gl-result"><span class="badge-w">W</span> 10-8</td>
+                <td>4</td><td>1</td><td>2</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row w">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> Conor Campbell fouled out to 3b (0-0).</div>
+<div class="play"><span class="inning-tag">4th</span> Conor Campbell grounded out to p (0-0).</div>
+<div class="play"><span class="inning-tag">6th</span> Conor Campbell doubled to right field, RBI (0-0); Matthew Gannon scored.</div>
+<div class="play"><span class="inning-tag">6th</span> John Heitzman singled up the middle, RBI (0-0); Conor Campbell scored.</div>
+<div class="play"><span class="inning-tag">6th</span> Conor Campbell singled to third base, bunt (0-0).</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row l" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 17</td>
+                <td class="gl-opp">Franklin &amp; Marshall College</td>
+                <td class="gl-result"><span class="badge-l">L</span> 5-10</td>
+                <td>5</td><td>1</td><td>1</td><td>0</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row l">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> Conor Campbell struck out looking (3-2 KBKBBK).</div>
+<div class="play"><span class="inning-tag">3rd</span> Conor Campbell struck out looking (2-2 FSBBK).</div>
+<div class="play"><span class="inning-tag">5th</span> Conor Campbell singled up the middle (1-2 KBK).</div>
+<div class="play"><span class="inning-tag">5th</span> John Heitzman singled to center field (3-2 BBKFB); Conor Campbell advanced to second.</div>
+<div class="play"><span class="inning-tag">5th</span> Joey Granko singled through the right side, RBI (0-0); John Heitzman advanced to third; Conor Campbell scored.</div>
+<div class="play"><span class="inning-tag">7th</span> Conor Campbell grounded out to 1b unassisted (3-2 BKBBKF).</div>
+<div class="play"><span class="inning-tag">8th</span> Conor Campbell reached on a fielder&#x27;s choice (2-1 BKB); Deuce Rzucidlo out at second 2b unassisted.</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row w" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 18</td>
+                <td class="gl-opp">University of Hartford</td>
+                <td class="gl-result"><span class="badge-w">W</span> 8-5</td>
+                <td>4</td><td>1</td><td>2</td><td>0</td><td>2</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row w">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> Conor Campbell reached first on an error by 1b (2-2 KFBB).</div>
+<div class="play"><span class="inning-tag">1st</span> Jack Portman struck out looking (2-2 SFBBFFK); Conor Campbell stole second.</div>
+<div class="play"><span class="inning-tag">1st</span> Conor Campbell picked off, out at second p to ss.</div>
+<div class="play"><span class="inning-tag">3rd</span> Conor Campbell singled to left field (0-2 FK); James Nitti advanced to second.</div>
+<div class="play"><span class="inning-tag">3rd</span> Jack Portman grounded out to p, SAC (0-0); Conor Campbell advanced to second; James Nitti advanced to third.</div>
+<div class="play"><span class="inning-tag">5th</span> Conor Campbell walked (3-0 BBBB).</div>
+<div class="play"><span class="inning-tag">5th</span> Jack Portman walked (3-2 BKFBBFFFB); Conor Campbell advanced to second.</div>
+<div class="play"><span class="inning-tag">5th</span> Joey Granko walked (3-1 BBFBB); Jack Portman advanced to second; Conor Campbell advanced to third.</div>
+<div class="play"><span class="inning-tag">5th</span> Matthew Gannon tripled to center field, 3 RBI (1-1 KB); Joey Granko scored; Jack Portman scored; Conor Campbell scored.</div>
+<div class="play"><span class="inning-tag">6th</span> Conor Campbell walked (3-0 BBBB); James Nitti advanced to second.</div>
+<div class="play"><span class="inning-tag">6th</span> Jack Portman singled to right field, RBI (2-1 BBK); Conor Campbell advanced to third; James Nitti scored.</div>
+<div class="play"><span class="inning-tag">8th</span> Conor Campbell singled to right field (3-1 BBKB).</div>
+<div class="play"><span class="inning-tag">8th</span> Tyler Yoo singled to left field (2-2 SBKB); Conor Campbell advanced to second.</div>
+<div class="play"><span class="inning-tag">8th</span> Joey Granko singled to pitcher (1-1 KB); Will Hunsinger advanced to second; Conor Campbell advanced to third.</div>
+<div class="play"><span class="inning-tag">9th</span> Conor Campbell struck out looking (0-2 KKFS).</div>
+</div>
+                </td>
+            </tr></tbody>
+        </table>
+    </div>
+
+    <!-- Schedule Section -->
+    <div class="section" id="schedule">
+        <div class="section-title">2026 Schedule</div>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead><tr><th>Date</th><th>Opponent</th><th>Result</th><th></th></tr></thead>
+                <tbody>
+        <tr>
+            <td class="sched-date">Feb 21</td>
+            <td class="sched-opp">at Arcadia University</td>
+            <td class="sched-result"><span class="badge-l">L</span> 3-11</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/arcadia-university/boxscore/6425" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Feb 25</td>
+            <td class="sched-opp">at Marywood University</td>
+            <td class="sched-result"><span class="badge-w">W</span> 9-4</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/marywood-university/boxscore/6427" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Feb 28</td>
+            <td class="sched-opp">at Washington &amp; Jefferson College</td>
+            <td class="sched-result"><span class="badge-l">L</span> 6-8</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/washington-jefferson-college/boxscore/6428" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Feb 28</td>
+            <td class="sched-opp">at Case Western Reserve University</td>
+            <td class="sched-result"><span class="badge-w">W</span> 11-6</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/case-western-reserve-university/boxscore/6429" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 4</td>
+            <td class="sched-opp">at Ithaca College</td>
+            <td class="sched-result"><span class="badge-w">W</span> 12-11</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/ithaca-college/boxscore/6430" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 6</td>
+            <td class="sched-opp">at Muhlenberg College</td>
+            <td class="sched-result"><span class="badge-w">W</span> 7-3</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/muhlenberg-college/boxscore/6431" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 7</td>
+            <td class="sched-opp">vs William Paterson University (DH)</td>
+            <td class="sched-result"><span class="badge-l">L</span> 8-9</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/william-paterson-university/boxscore/6432" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 7</td>
+            <td class="sched-opp">vs William Paterson University (DH)</td>
+            <td class="sched-result"><span class="badge-w">W</span> 9-7</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/william-paterson-university/boxscore/6433" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 14</td>
+            <td class="sched-opp">vs Farmingdale State College (DH)</td>
+            <td class="sched-result"><span class="badge-w">W</span> 6-5</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/farmingdale-state-college/boxscore/6517" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 14</td>
+            <td class="sched-opp">vs Farmingdale State College (DH)</td>
+            <td class="sched-result"><span class="badge-w">W</span> 13-3</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/farmingdale-state-college/boxscore/6518" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 15</td>
+            <td class="sched-opp">at University of Mount Saint Vincent</td>
+            <td class="sched-result"><span class="badge-w">W</span> 25-6</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/university-of-mount-saint-vincent/boxscore/6520" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 16</td>
+            <td class="sched-opp">at Babson College</td>
+            <td class="sched-result"><span class="badge-w">W</span> 10-8</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/babson-college/boxscore/6521" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 17</td>
+            <td class="sched-opp">at Franklin &amp; Marshall College</td>
+            <td class="sched-result"><span class="badge-l">L</span> 5-10</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/franklin-marshall-college/boxscore/6522" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 18</td>
+            <td class="sched-opp">at University of Hartford</td>
+            <td class="sched-result"><span class="badge-w">W</span> 8-5</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/university-of-hartford/boxscore/6523" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 21</td>
+            <td class="sched-opp">vs Juniata College (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"><a href="https://www.juniatasports.net/sports/bsb/2025-26/boxscores/20260321_wgak.xml" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 21</td>
+            <td class="sched-opp">vs Juniata College (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"><a href="https://www.juniatasports.net/sports/bsb/2025-26/boxscores/20260321_rc4y.xml" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 22</td>
+            <td class="sched-opp">vs Juniata College</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"><a href="https://www.juniatasports.net/sports/bsb/2025-26/boxscores/20260322_co6w.xml" target="_blank" class="box-link">Box Score</a></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 25</td>
+            <td class="sched-opp">at Wilkes University</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 28</td>
+            <td class="sched-opp">at Elizabethtown College (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 28</td>
+            <td class="sched-opp">at Elizabethtown College (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 29</td>
+            <td class="sched-opp">at Elizabethtown College</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Mar 31</td>
+            <td class="sched-opp">at Moravian University</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 1</td>
+            <td class="sched-opp">at Lebanon Valley College</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 4</td>
+            <td class="sched-opp">vs Catholic University (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 4</td>
+            <td class="sched-opp">vs Catholic University (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 6</td>
+            <td class="sched-opp">vs Catholic University</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 8</td>
+            <td class="sched-opp">at Wilkes University</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 11</td>
+            <td class="sched-opp">at Lycoming College (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 11</td>
+            <td class="sched-opp">at Lycoming College (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 12</td>
+            <td class="sched-opp">at Lycoming College</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 14</td>
+            <td class="sched-opp">at Moravian University</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 15</td>
+            <td class="sched-opp">at Misericordia University</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 18</td>
+            <td class="sched-opp">at Drew University (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 18</td>
+            <td class="sched-opp">at Drew University (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 19</td>
+            <td class="sched-opp">at Drew University</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 22</td>
+            <td class="sched-opp">at Wilkes University</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 25</td>
+            <td class="sched-opp">at Susquehanna University (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 25</td>
+            <td class="sched-opp">at Susquehanna University (DH)</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 26</td>
+            <td class="sched-opp">at Susquehanna University</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">Apr 29</td>
+            <td class="sched-opp">at Moravian University</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr>
+        <tr>
+            <td class="sched-date">May 5</td>
+            <td class="sched-opp">vs Landmark Conference Tournament</td>
+            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
+            <td class="sched-box"></td>
+        </tr></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer>
+    Data from <a href="https://athletics.scranton.edu/sports/baseball" target="_blank">athletics.scranton.edu</a>
+</footer>
+
+<script>
+// Smooth scroll for nav
+document.querySelectorAll('.nav a').forEach(a => {
+    a.addEventListener('click', e => {
+        const href = a.getAttribute('href');
+        if (href.startsWith('#')) {
+            e.preventDefault();
+            document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+            document.querySelectorAll('.nav a').forEach(n => n.classList.remove('active'));
+            a.classList.add('active');
+        }
+    });
+});
+
+// Update active nav on scroll
+const sections = document.querySelectorAll('.section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+});
+</script>
+</body>
+</html>
