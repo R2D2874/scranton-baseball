@@ -843,7 +843,7 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
 
         {campbell_fielding_html}
 
-        <h3 class="sub-heading">Game Log <span style="font-weight:400; color: var(--text-muted); font-size: 0.75rem; text-transform: none; letter-spacing: 0;">(click a game for play-by-play)</span></h3>
+        <h3 class="sub-heading"><strong style="color: var(--text); font-weight: 800;">Conor's</strong> GAME LOG <span style="font-weight:400; color: var(--text-muted); font-size: 0.75rem; text-transform: none; letter-spacing: 0;">(click a game for play-by-play)</span></h3>
         {game_log_html}
     </div>
 
