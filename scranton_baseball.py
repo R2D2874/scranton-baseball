@@ -536,6 +536,7 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             color: var(--gold);
             line-height: 1;
             letter-spacing: -0.03em;
+            white-space: nowrap;
         }}
         .record-label {{
             font-size: 0.7rem;
