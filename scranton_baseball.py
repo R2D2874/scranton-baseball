@@ -490,7 +490,7 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
         /* --- Hero --- */
         .hero {{
             background: linear-gradient(160deg, var(--purple-dark) 0%, var(--purple) 40%, var(--purple-light) 100%);
-            padding: 3rem 2rem 2.5rem;
+            padding: 3rem 2rem 0;
             position: relative;
             overflow: hidden;
         }}
@@ -546,6 +546,117 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             font-size: 0.7rem;
             color: rgba(255,255,255,0.35);
             margin-top: 1rem;
+            padding-bottom: 1.5rem;
+        }}
+
+        /* --- Carousel --- */
+        .carousel {{
+            position: relative;
+            width: calc(100% + 4rem);
+            margin-left: -2rem;
+            height: 420px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }}
+        .carousel-track {{
+            display: flex;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }}
+        .carousel-track img {{
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #1a1030;
+        }}
+        .carousel-btn {{
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.45);
+            border: none;
+            color: white;
+            font-size: 1.4rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }}
+        .carousel-btn:hover {{ background: rgba(0,0,0,0.7); }}
+        .carousel-btn.prev {{ left: 1rem; }}
+        .carousel-btn.next {{ right: 1rem; }}
+        .carousel-dots {{
+            position: absolute;
+            bottom: 0.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+        }}
+        .carousel-dots span {{
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: background 0.2s;
+        }}
+        .carousel-dots span.active {{ background: var(--gold); }}
+
+        /* --- Photo Gallery --- */
+        .photo-grid {{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }}
+        .photo-grid img {{
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            object-position: center 30%;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+        }}
+        .photo-grid img:hover {{ opacity: 0.85; transform: scale(1.01); }}
+        .photo-grid img:first-child {{
+            grid-column: span 2;
+            aspect-ratio: 16/9;
+        }}
+
+        /* Lightbox */
+        .lightbox {{
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }}
+        .lightbox.open {{ display: flex; }}
+        .lightbox img {{
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 4px;
+        }}
+        .lightbox-close {{
+            position: absolute;
+            top: 1rem;
+            right: 1.25rem;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            line-height: 1;
         }}
 
         /* --- Nav --- */
@@ -786,18 +897,8 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             text-align: center;
         }}
 
-        footer {{
-            padding: 2rem;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.7rem;
-            border-top: 1px solid var(--border);
-            margin-top: 1rem;
-        }}
-        footer a {{ color: var(--purple-light); text-decoration: none; }}
-
         @media (max-width: 700px) {{
-            .hero {{ padding: 2rem 1.25rem 1.5rem; }}
+            .hero {{ padding: 2rem 1.25rem 0; }}
             .hero h1 {{ font-size: 1.2rem; }}
             .record-num {{ font-size: 2rem; }}
             .stat-card {{ min-width: 60px; padding: 0.5rem 0.6rem; }}
@@ -805,6 +906,9 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             table {{ font-size: 0.75rem; }}
             td, th {{ padding: 0.4rem 0.45rem; }}
             .nav a {{ padding: 0.7rem 0.8rem; font-size: 0.7rem; }}
+            .carousel {{ height: 240px; }}
+            .photo-grid {{ grid-template-columns: repeat(2, 1fr); }}
+            .photo-grid img:first-child {{ grid-column: span 2; }}
         }}
     </style>
 </head>
@@ -824,11 +928,26 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
         </div>
         <div class="updated">Updated {esc(now)}</div>
     </div>
+    <div class="carousel">
+        <div class="carousel-track" id="carouselTrack">
+            <img src="images/IMG_2142.jpg" alt="Conor Campbell batting">
+            <img src="images/IMG_3475.jpg" alt="Conor Campbell at the plate">
+            <img src="images/IMG_3606.jpeg" alt="Conor Campbell hitting">
+            <img src="images/IMG_4394.jpeg" alt="Conor Campbell in action">
+            <img src="images/IMG_4463.jpeg" alt="Conor Campbell swinging">
+            <img src="images/TDP_0739.JPG" alt="Conor Campbell batting stance">
+            <img src="images/TDP_5748.JPG" alt="Conor Campbell at bat">
+        </div>
+        <button class="carousel-btn prev" id="carouselPrev">&#8249;</button>
+        <button class="carousel-btn next" id="carouselNext">&#8250;</button>
+        <div class="carousel-dots" id="carouselDots"></div>
+    </div>
 </div>
 
 <div class="nav">
     <div class="nav-inner">
         <a href="#campbell" class="active">Campbell</a>
+        <a href="#photos">Photos</a>
         <a href="#schedule">Schedule</a>
     </div>
 </div>
@@ -857,13 +976,70 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             </table>
         </div>
     </div>
+
+    <!-- Photos Section -->
+    <div class="section" id="photos">
+        <div class="section-title">Photos</div>
+        <div class="photo-grid" id="photoGrid">
+            <img src="images/TDP_0739.JPG" alt="Conor Campbell batting">
+            <img src="images/TDP_5748.JPG" alt="Conor Campbell swinging">
+            <img src="images/IMG_2142.jpg" alt="Conor Campbell at the plate">
+            <img src="images/IMG_3475.jpg" alt="Conor Campbell hitting">
+            <img src="images/IMG_3606.jpeg" alt="Conor Campbell in action">
+            <img src="images/IMG_4394.jpeg" alt="Conor Campbell batting stance">
+            <img src="images/IMG_4463.jpeg" alt="Conor Campbell at bat">
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose">&times;</button>
+        <img id="lightboxImg" src="" alt="">
+    </div>
 </div>
 
-<footer>
-    Data from <a href="https://athletics.scranton.edu/sports/baseball" target="_blank">athletics.scranton.edu</a>
-</footer>
-
 <script>
+// Photo lightbox
+(function() {{
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    document.getElementById('photoGrid').querySelectorAll('img').forEach(img => {{
+        img.addEventListener('click', () => {{
+            lightboxImg.src = img.src;
+            lightbox.classList.add('open');
+        }});
+    }});
+    document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
+    lightbox.addEventListener('click', e => {{ if (e.target === lightbox) lightbox.classList.remove('open'); }});
+}})();
+
+// Carousel
+(function() {{
+    const track = document.getElementById('carouselTrack');
+    const dotsContainer = document.getElementById('carouselDots');
+    const total = track.children.length;
+    let current = 0;
+    let timer;
+    for (let i = 0; i < total; i++) {{
+        const dot = document.createElement('span');
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(dot);
+    }}
+    function goTo(n) {{
+        current = (n + total) % total;
+        track.style.transform = `translateX(-${{current * 100}}%)`;
+        dotsContainer.querySelectorAll('span').forEach((d, i) => d.classList.toggle('active', i === current));
+        resetTimer();
+    }}
+    function resetTimer() {{
+        clearInterval(timer);
+        timer = setInterval(() => goTo(current + 1), 4000);
+    }}
+    document.getElementById('carouselPrev').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('carouselNext').addEventListener('click', () => goTo(current + 1));
+    resetTimer();
+}})();
+
 // Smooth scroll for nav
 document.querySelectorAll('.nav a').forEach(a => {{
     a.addEventListener('click', e => {{
