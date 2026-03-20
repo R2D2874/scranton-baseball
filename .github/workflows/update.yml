@@ -2,8 +2,9 @@ name: Update Dashboard
 
 on:
   schedule:
-    # Runs daily at 8:00 AM ET (12:00 UTC)
-    - cron: '0 12 * * *'
+    # Runs at 10:00 AM ET (14:00 UTC) and 11:00 PM ET (03:00 UTC)
+    - cron: '0 14 * * *'
+    - cron: '0 3 * * *'
   workflow_dispatch: # Allow manual trigger
 
 permissions:

@@ -859,10 +859,6 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
     </div>
 </div>
 
-<footer>
-    Data from <a href="https://athletics.scranton.edu/sports/baseball" target="_blank">athletics.scranton.edu</a>
-</footer>
-
 <script>
 // Smooth scroll for nav
 document.querySelectorAll('.nav a').forEach(a => {{
