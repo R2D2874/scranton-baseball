@@ -6,7 +6,7 @@ Custom site for tracking the season with a focus on Conor Campbell.
 
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import os
 import re
 import html as html_lib
@@ -302,7 +302,8 @@ def esc(text):
 
 
 def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_log, team_hitting):
-    now = datetime.now().strftime("%B %d, %Y at %I:%M %p")
+    eastern = timezone(timedelta(hours=-4))
+    now = datetime.now(eastern).strftime("%B %d, %Y at %I:%M %p EST")
     record = f"{schedule['wins']}-{schedule['losses']}"
 
     # --- Campbell season stats card ---
