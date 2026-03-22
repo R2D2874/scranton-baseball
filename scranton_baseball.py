@@ -6,7 +6,7 @@ Custom site for tracking the season with a focus on Conor Campbell.
 
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
 import os
 import re
 import html as html_lib
@@ -139,13 +139,14 @@ def should_include_table(label):
 
 
 def parse_team_stats():
-    """Parse team stats page. Returns (hitting_stats, campbell_overall, campbell_fielding)."""
+    """Parse team stats page. Returns (hitting_stats, campbell_overall, campbell_fielding, all_batting)."""
     soup = fetch_page(STATS_URL)
     tables = soup.select("table")
 
     team_hitting = {}
     campbell_overall = {}
     campbell_fielding = {}
+    all_batting = None
 
     for table in tables:
         caption = table.select_one("caption")
@@ -184,6 +185,7 @@ def parse_team_stats():
 
         # Campbell's overall hitting
         if label == "Individual Overall Batting Statistics":
+            all_batting = {"headers": col_headers, "rows": rows}
             campbell_rows = [r for r in rows if r["highlight"]]
             if campbell_rows:
                 campbell_overall["hitting"] = {
@@ -204,7 +206,67 @@ def parse_team_stats():
         if should_include_table(label):
             team_hitting[label] = {"headers": col_headers, "rows": rows}
 
-    return team_hitting, campbell_overall, campbell_fielding
+    return team_hitting, campbell_overall, campbell_fielding, all_batting
+
+
+def find_campbell_team_leads(team_hitting, all_batting=None):
+    """Determine which stats Campbell leads the team in.
+    Returns a set of stat names (e.g. {'H', 'R'}) where he is #1 or tied for #1."""
+    table = all_batting or team_hitting.get("Individual Overall Batting Statistics")
+    if not table:
+        return set()
+
+    hdrs = table["headers"]
+    rows = table["rows"]
+
+    # Stats worth checking for team lead
+    check_stats = {"AVG", "OPS", "H", "R", "RBI", "2B", "3B", "HR", "BB", "SB-ATT",
+                   "SLG%", "OB%", "AB"}
+
+    campbell_row = None
+    all_rows = []
+    for r in rows:
+        cells = r["cells"]
+        # Skip totals/team rows
+        name = cells[1] if len(cells) > 1 else ""
+        if "total" in name.lower() or "opponent" in name.lower():
+            continue
+        all_rows.append(cells)
+        if r["highlight"]:
+            campbell_row = cells
+
+    if not campbell_row:
+        return set()
+
+    leads = set()
+    for stat in check_stats:
+        if stat not in hdrs:
+            continue
+        idx = hdrs.index(stat)
+
+        campbell_val = campbell_row[idx] if idx < len(campbell_row) else ""
+        try:
+            c_num = float(campbell_val)
+        except (ValueError, TypeError):
+            continue
+
+        is_leader = True
+        for row in all_rows:
+            if row is campbell_row:
+                continue
+            other_val = row[idx] if idx < len(row) else ""
+            try:
+                o_num = float(other_val)
+            except (ValueError, TypeError):
+                continue
+            if o_num > c_num:
+                is_leader = False
+                break
+
+        if is_leader:
+            leads.add(stat)
+
+    return leads
 
 
 # ---------------------------------------------------------------------------
@@ -301,9 +363,8 @@ def esc(text):
     return html_lib.escape(str(text))
 
 
-def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_log, team_hitting):
-    eastern = timezone(timedelta(hours=-4))
-    now = datetime.now(eastern).strftime("%B %d, %Y at %I:%M %p EST")
+def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_log, team_hitting, campbell_leads=None):
+    now = datetime.now().strftime("%B %d, %Y at %I:%M %p")
     record = f"{schedule['wins']}-{schedule['losses']}"
 
     # --- Campbell season stats card ---
@@ -336,11 +397,16 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             ("AB", stat_map.get("AB", "-")),
         ]
 
+        leads = campbell_leads or set()
         cards = ""
         for label, val in key_stats:
             big = label in ("AVG", "OPS", "H", "RBI", "R")
-            size_class = "stat-big" if big else "stat-small"
-            cards += f'<div class="stat-card {size_class}"><div class="stat-val">{esc(val)}</div><div class="stat-label">{esc(label)}</div></div>\n'
+            is_leader = label in leads
+            classes = "stat-big" if big else "stat-small"
+            if is_leader:
+                classes += " team-leader"
+            badge = '<span class="team-leader-badge">Team Leader</span>' if is_leader else ""
+            cards += f'<div class="stat-card {classes}">{badge}<div class="stat-val">{esc(val)}</div><div class="stat-label">{esc(label)}</div></div>\n'
 
         campbell_hitting_html = f'<div class="stat-grid">{cards}</div>'
 
@@ -491,7 +557,7 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
         /* --- Hero --- */
         .hero {{
             background: linear-gradient(160deg, var(--purple-dark) 0%, var(--purple) 40%, var(--purple-light) 100%);
-            padding: 3rem 2rem 0;
+            padding: 3rem 2rem 2.5rem;
             position: relative;
             overflow: hidden;
         }}
@@ -536,7 +602,6 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             color: var(--gold);
             line-height: 1;
             letter-spacing: -0.03em;
-            white-space: nowrap;
         }}
         .record-label {{
             font-size: 0.7rem;
@@ -548,117 +613,6 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             font-size: 0.7rem;
             color: rgba(255,255,255,0.35);
             margin-top: 1rem;
-            padding-bottom: 1.5rem;
-        }}
-
-        /* --- Carousel --- */
-        .carousel {{
-            position: relative;
-            width: calc(100% + 4rem);
-            margin-left: -2rem;
-            height: 420px;
-            overflow: hidden;
-            margin-top: 1.5rem;
-        }}
-        .carousel-track {{
-            display: flex;
-            height: 100%;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }}
-        .carousel-track img {{
-            flex: 0 0 100%;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #1a1030;
-        }}
-        .carousel-btn {{
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.45);
-            border: none;
-            color: white;
-            font-size: 1.4rem;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }}
-        .carousel-btn:hover {{ background: rgba(0,0,0,0.7); }}
-        .carousel-btn.prev {{ left: 1rem; }}
-        .carousel-btn.next {{ right: 1rem; }}
-        .carousel-dots {{
-            position: absolute;
-            bottom: 0.75rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 6px;
-        }}
-        .carousel-dots span {{
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.4);
-            cursor: pointer;
-            transition: background 0.2s;
-        }}
-        .carousel-dots span.active {{ background: var(--gold); }}
-
-        /* --- Photo Gallery --- */
-        .photo-grid {{
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.75rem;
-        }}
-        .photo-grid img {{
-            width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            object-position: center 30%;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.2s;
-        }}
-        .photo-grid img:hover {{ opacity: 0.85; transform: scale(1.01); }}
-        .photo-grid img:first-child {{
-            grid-column: span 2;
-            aspect-ratio: 16/9;
-        }}
-
-        /* Lightbox */
-        .lightbox {{
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.92);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }}
-        .lightbox.open {{ display: flex; }}
-        .lightbox img {{
-            max-width: 90vw;
-            max-height: 90vh;
-            object-fit: contain;
-            border-radius: 4px;
-        }}
-        .lightbox-close {{
-            position: absolute;
-            top: 1rem;
-            right: 1.25rem;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            background: none;
-            border: none;
-            line-height: 1;
         }}
 
         /* --- Nav --- */
@@ -734,6 +688,26 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             padding: 0.75rem 1rem;
             text-align: center;
             min-width: 72px;
+            position: relative;
+        }}
+        .stat-card.team-leader {{
+            border-color: var(--gold);
+            box-shadow: 0 0 12px rgba(212, 168, 67, 0.15);
+        }}
+        .team-leader-badge {{
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, var(--gold) 0%, #B8912E 100%);
+            color: #1a1a22;
+            font-size: 0.45rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 2px 6px;
+            border-radius: 4px;
+            line-height: 1.4;
+            box-shadow: 0 2px 6px rgba(212, 168, 67, 0.4);
         }}
         .stat-big {{
             background: var(--surface-2);
@@ -899,8 +873,18 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             text-align: center;
         }}
 
+        footer {{
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            border-top: 1px solid var(--border);
+            margin-top: 1rem;
+        }}
+        footer a {{ color: var(--purple-light); text-decoration: none; }}
+
         @media (max-width: 700px) {{
-            .hero {{ padding: 2rem 1.25rem 0; }}
+            .hero {{ padding: 2rem 1.25rem 1.5rem; }}
             .hero h1 {{ font-size: 1.2rem; }}
             .record-num {{ font-size: 2rem; }}
             .stat-card {{ min-width: 60px; padding: 0.5rem 0.6rem; }}
@@ -908,9 +892,6 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             table {{ font-size: 0.75rem; }}
             td, th {{ padding: 0.4rem 0.45rem; }}
             .nav a {{ padding: 0.7rem 0.8rem; font-size: 0.7rem; }}
-            .carousel {{ height: 240px; }}
-            .photo-grid {{ grid-template-columns: repeat(2, 1fr); }}
-            .photo-grid img:first-child {{ grid-column: span 2; }}
         }}
     </style>
 </head>
@@ -930,26 +911,11 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
         </div>
         <div class="updated">Updated {esc(now)}</div>
     </div>
-    <div class="carousel">
-        <div class="carousel-track" id="carouselTrack">
-            <img src="images/IMG_2142.jpg" alt="Conor Campbell batting">
-            <img src="images/IMG_3475.jpg" alt="Conor Campbell at the plate">
-            <img src="images/IMG_3606.jpeg" alt="Conor Campbell hitting">
-            <img src="images/IMG_4394.jpeg" alt="Conor Campbell in action">
-            <img src="images/IMG_4463.jpeg" alt="Conor Campbell swinging">
-            <img src="images/TDP_0739.JPG" alt="Conor Campbell batting stance">
-            <img src="images/TDP_5748.JPG" alt="Conor Campbell at bat">
-        </div>
-        <button class="carousel-btn prev" id="carouselPrev">&#8249;</button>
-        <button class="carousel-btn next" id="carouselNext">&#8250;</button>
-        <div class="carousel-dots" id="carouselDots"></div>
-    </div>
 </div>
 
 <div class="nav">
     <div class="nav-inner">
         <a href="#campbell" class="active">Campbell</a>
-        <a href="#photos">Photos</a>
         <a href="#schedule">Schedule</a>
     </div>
 </div>
@@ -978,70 +944,13 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             </table>
         </div>
     </div>
-
-    <!-- Photos Section -->
-    <div class="section" id="photos">
-        <div class="section-title">Photos</div>
-        <div class="photo-grid" id="photoGrid">
-            <img src="images/TDP_0739.JPG" alt="Conor Campbell batting">
-            <img src="images/TDP_5748.JPG" alt="Conor Campbell swinging">
-            <img src="images/IMG_2142.jpg" alt="Conor Campbell at the plate">
-            <img src="images/IMG_3475.jpg" alt="Conor Campbell hitting">
-            <img src="images/IMG_3606.jpeg" alt="Conor Campbell in action">
-            <img src="images/IMG_4394.jpeg" alt="Conor Campbell batting stance">
-            <img src="images/IMG_4463.jpeg" alt="Conor Campbell at bat">
-        </div>
-    </div>
-
-    <div class="lightbox" id="lightbox">
-        <button class="lightbox-close" id="lightboxClose">&times;</button>
-        <img id="lightboxImg" src="" alt="">
-    </div>
 </div>
 
+<footer>
+    Data from <a href="https://athletics.scranton.edu/sports/baseball" target="_blank">athletics.scranton.edu</a>
+</footer>
+
 <script>
-// Photo lightbox
-(function() {{
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-    document.getElementById('photoGrid').querySelectorAll('img').forEach(img => {{
-        img.addEventListener('click', () => {{
-            lightboxImg.src = img.src;
-            lightbox.classList.add('open');
-        }});
-    }});
-    document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
-    lightbox.addEventListener('click', e => {{ if (e.target === lightbox) lightbox.classList.remove('open'); }});
-}})();
-
-// Carousel
-(function() {{
-    const track = document.getElementById('carouselTrack');
-    const dotsContainer = document.getElementById('carouselDots');
-    const total = track.children.length;
-    let current = 0;
-    let timer;
-    for (let i = 0; i < total; i++) {{
-        const dot = document.createElement('span');
-        if (i === 0) dot.classList.add('active');
-        dot.addEventListener('click', () => goTo(i));
-        dotsContainer.appendChild(dot);
-    }}
-    function goTo(n) {{
-        current = (n + total) % total;
-        track.style.transform = `translateX(-${{current * 100}}%)`;
-        dotsContainer.querySelectorAll('span').forEach((d, i) => d.classList.toggle('active', i === current));
-        resetTimer();
-    }}
-    function resetTimer() {{
-        clearInterval(timer);
-        timer = setInterval(() => goTo(current + 1), 4000);
-    }}
-    document.getElementById('carouselPrev').addEventListener('click', () => goTo(current - 1));
-    document.getElementById('carouselNext').addEventListener('click', () => goTo(current + 1));
-    resetTimer();
-}})();
-
 // Smooth scroll for nav
 document.querySelectorAll('.nav a').forEach(a => {{
     a.addEventListener('click', e => {{
@@ -1090,13 +999,13 @@ def main():
 
     print("\n[2/4] Fetching team stats...")
     try:
-        team_hitting, campbell_overall, campbell_fielding = parse_team_stats()
+        team_hitting, campbell_overall, campbell_fielding, all_batting = parse_team_stats()
         print(f"  Hitting tables: {len(team_hitting)}")
         print(f"  Campbell hitting: {'Yes' if 'hitting' in campbell_overall else 'No'}")
         print(f"  Campbell fielding: {'Yes' if campbell_fielding else 'No'}")
     except Exception as e:
         print(f"  Error: {e}")
-        team_hitting, campbell_overall, campbell_fielding = {}, {}, {}
+        team_hitting, campbell_overall, campbell_fielding, all_batting = {}, {}, {}, None
 
     print("\n[3/4] Fetching box scores for Campbell game log...")
     try:
@@ -1107,7 +1016,10 @@ def main():
         campbell_game_log = []
 
     print("\n[4/4] Generating HTML...")
-    html = generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_log, team_hitting)
+    campbell_leads = find_campbell_team_leads(team_hitting, all_batting)
+    if campbell_leads:
+        print(f"  Campbell leads team in: {', '.join(sorted(campbell_leads))}")
+    html = generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_log, team_hitting, campbell_leads)
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html)
