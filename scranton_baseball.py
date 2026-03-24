@@ -874,15 +874,6 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             text-align: center;
         }}
 
-        footer {{
-            padding: 2rem;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.7rem;
-            border-top: 1px solid var(--border);
-            margin-top: 1rem;
-        }}
-        footer a {{ color: var(--purple-light); text-decoration: none; }}
 
         /* --- Carousel --- */
         .carousel {{
@@ -1029,6 +1020,7 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
     </div>
     <div class="carousel">
         <div class="carousel-track" id="carouselTrack">
+            <img src="images/150_career_hits.jpg" alt="Conor Campbell - 150 Career Hits">
             <img src="images/IMG_2142.jpg" alt="Conor Campbell batting">
             <img src="images/IMG_3475.jpg" alt="Conor Campbell at the plate">
             <img src="images/IMG_3606.jpeg" alt="Conor Campbell hitting">
@@ -1069,6 +1061,7 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
     <div class="section" id="photos">
         <div class="section-title">Photos</div>
         <div class="photo-grid" id="photoGrid">
+            <img src="images/150_career_hits.jpg" alt="Conor Campbell - 150 Career Hits">
             <img src="images/TDP_0739.JPG" alt="Conor Campbell batting">
             <img src="images/TDP_5748.JPG" alt="Conor Campbell swinging">
             <img src="images/IMG_2142.jpg" alt="Conor Campbell at the plate">
@@ -1096,9 +1089,6 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
     </div>
 </div>
 
-<footer>
-    Data from <a href="https://athletics.scranton.edu/sports/baseball" target="_blank">athletics.scranton.edu</a>
-</footer>
 
 <script>
 // Photo lightbox
