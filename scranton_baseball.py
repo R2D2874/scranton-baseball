@@ -943,7 +943,6 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
         }}
         .photo-grid img {{
             width: 100%;
-            aspect-ratio: 3/4;
             object-fit: contain;
             background: var(--surface);
             border-radius: 6px;
