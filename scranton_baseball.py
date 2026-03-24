@@ -880,7 +880,7 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             position: relative;
             width: calc(100% + 4rem);
             margin-left: -2rem;
-            height: 420px;
+            height: 520px;
             overflow: hidden;
             margin-top: 1.5rem;
         }}
@@ -943,18 +943,14 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
         }}
         .photo-grid img {{
             width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            object-position: center 30%;
+            aspect-ratio: 3/4;
+            object-fit: contain;
+            background: var(--surface);
             border-radius: 6px;
             cursor: pointer;
             transition: opacity 0.2s, transform 0.2s;
         }}
         .photo-grid img:hover {{ opacity: 0.85; transform: scale(1.01); }}
-        .photo-grid img:first-child {{
-            grid-column: span 2;
-            aspect-ratio: 16/9;
-        }}
 
         /* Lightbox */
         .lightbox {{
@@ -996,7 +992,7 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
             table {{ font-size: 0.75rem; }}
             td, th {{ padding: 0.4rem 0.45rem; }}
             .nav a {{ padding: 0.7rem 0.8rem; font-size: 0.7rem; }}
-            .carousel {{ height: 240px; }}
+            .carousel {{ height: 340px; }}
             .photo-grid {{ grid-template-columns: repeat(2, 1fr); }}
             .photo-grid img:first-child {{ grid-column: span 2; }}
         }}
