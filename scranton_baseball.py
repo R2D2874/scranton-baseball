@@ -983,7 +983,7 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
         @media (max-width: 700px) {{
             .hero {{ padding: 2rem 1.25rem 1.5rem; }}
             .hero h1 {{ font-size: 1.2rem; }}
-            .record-num {{ font-size: 2rem; }}
+            .record-num {{ font-size: 2rem; white-space: nowrap; }}
             .stat-card {{ min-width: 60px; padding: 0.5rem 0.6rem; }}
             .stat-big .stat-val {{ font-size: 1.2rem; }}
             .stat-grid {{ gap: 0.75rem; }}
