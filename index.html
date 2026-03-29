@@ -476,14 +476,6 @@
             .carousel { height: 340px; }
             .photo-grid { grid-template-columns: repeat(2, 1fr); }
             .photo-grid img:first-child { grid-column: span 2; }
-
-            /* Schedule table: fit within viewport without horizontal scroll */
-            #schedule table { width: 100%; table-layout: fixed; }
-            .sched-date { width: 55px; font-size: 0.7rem; }
-            .sched-opp { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-            .sched-result { width: 70px; font-size: 0.7rem; }
-            .sched-box { width: 62px; }
-            .box-link { font-size: 0.65rem; padding: 0.2rem 0.35rem; }
         }
     </style>
 </head>
@@ -497,11 +489,11 @@
                 <div class="subtitle">2026 Season</div>
             </div>
             <div class="record-block">
-                <div class="record-num">14-5</div>
+                <div class="record-num">15-6</div>
                 <div class="record-label">Record</div>
             </div>
         </div>
-        <div class="updated">Updated March 29, 2026 at 02:05 PM</div>
+        <div class="updated">Updated March 29, 2026 at 10:00 PM</div>
     </div>
     <div class="carousel">
         <div class="carousel-track" id="carouselTrack">
@@ -534,30 +526,30 @@
         <div class="section-title">#14 Conor Campbell</div>
 
         <h3 class="sub-heading">2026 Season Hitting</h3>
-        <div class="stat-grid"><div class="stat-card stat-big"><div class="stat-val">.416</div><div class="stat-label">AVG</div></div>
-<div class="stat-card stat-big"><div class="stat-val">.957</div><div class="stat-label">OPS</div></div>
-<div class="stat-card stat-big team-leader"><span class="team-leader-badge">Team Leader</span><div class="stat-val">32</div><div class="stat-label">H</div></div>
-<div class="stat-card stat-big team-leader"><span class="team-leader-badge">Team Leader</span><div class="stat-val">22</div><div class="stat-label">R</div></div>
-<div class="stat-card stat-big"><div class="stat-val">16</div><div class="stat-label">RBI</div></div>
+        <div class="stat-grid"><div class="stat-card stat-big"><div class="stat-val">.400</div><div class="stat-label">AVG</div></div>
+<div class="stat-card stat-big"><div class="stat-val">.912</div><div class="stat-label">OPS</div></div>
+<div class="stat-card stat-big team-leader"><span class="team-leader-badge">Team Leader</span><div class="stat-val">34</div><div class="stat-label">H</div></div>
+<div class="stat-card stat-big"><div class="stat-val">22</div><div class="stat-label">R</div></div>
+<div class="stat-card stat-big"><div class="stat-val">17</div><div class="stat-label">RBI</div></div>
 <div class="stat-card stat-small"><div class="stat-val">4</div><div class="stat-label">2B</div></div>
 <div class="stat-card stat-small"><div class="stat-val">0</div><div class="stat-label">3B</div></div>
 <div class="stat-card stat-small"><div class="stat-val">0</div><div class="stat-label">HR</div></div>
 <div class="stat-card stat-small"><div class="stat-val">12</div><div class="stat-label">BB</div></div>
 <div class="stat-card stat-small"><div class="stat-val">2-3</div><div class="stat-label">SB-ATT</div></div>
-<div class="stat-card stat-small"><div class="stat-val">6</div><div class="stat-label">SO</div></div>
-<div class="stat-card stat-small"><div class="stat-val">.468</div><div class="stat-label">SLG%</div></div>
-<div class="stat-card stat-small"><div class="stat-val">.489</div><div class="stat-label">OB%</div></div>
-<div class="stat-card stat-small"><div class="stat-val">19-19</div><div class="stat-label">GP-GS</div></div>
-<div class="stat-card stat-small team-leader"><span class="team-leader-badge">Team Leader</span><div class="stat-val">77</div><div class="stat-label">AB</div></div>
+<div class="stat-card stat-small"><div class="stat-val">7</div><div class="stat-label">SO</div></div>
+<div class="stat-card stat-small"><div class="stat-val">.447</div><div class="stat-label">SLG%</div></div>
+<div class="stat-card stat-small"><div class="stat-val">.465</div><div class="stat-label">OB%</div></div>
+<div class="stat-card stat-small"><div class="stat-val">21-21</div><div class="stat-label">GP-GS</div></div>
+<div class="stat-card stat-small team-leader"><span class="team-leader-badge">Team Leader</span><div class="stat-val">85</div><div class="stat-label">AB</div></div>
 </div>
 
         
         <h3 class="sub-heading">Fielding</h3>
         <div class="stat-grid"><div class="stat-card stat-small"><div class="stat-val">.980</div><div class="stat-label">FLD%</div></div>
-<div class="stat-card stat-small"><div class="stat-val">47</div><div class="stat-label">PO</div></div>
+<div class="stat-card stat-small"><div class="stat-val">48</div><div class="stat-label">PO</div></div>
 <div class="stat-card stat-small"><div class="stat-val">1</div><div class="stat-label">A</div></div>
 <div class="stat-card stat-small"><div class="stat-val">1</div><div class="stat-label">E</div></div>
-<div class="stat-card stat-small"><div class="stat-val">49</div><div class="stat-label">C</div></div>
+<div class="stat-card stat-small"><div class="stat-val">50</div><div class="stat-label">C</div></div>
 </div>
 
         <h3 class="sub-heading"><strong style="color: var(--text); font-weight: 800;">Conor's</strong> GAME LOG <span style="font-weight:400; color: var(--text-muted); font-size: 0.75rem; text-transform: none; letter-spacing: 0;">(click a game for play-by-play)</span></h3>
@@ -923,6 +915,39 @@
 <div class="play"><span class="inning-tag">9th</span> Conor Campbell grounded out to ss (0-0).</div>
 </div>
                 </td>
+            </tr>
+            <tr class="game-row l" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 29</td>
+                <td class="gl-opp">Elizabethtown College (DH)</td>
+                <td class="gl-result"><span class="badge-l">L</span> 1-5</td>
+                <td>4</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row l">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> Conor Campbell struck out looking (3-2 BBKFBK).</div>
+<div class="play"><span class="inning-tag">3rd</span> Conor Campbell singled through the right side (0-1 K); James Nitti advanced to third.</div>
+<div class="play"><span class="inning-tag">3rd</span> Jared Cassella reached on a fielder&#x27;s choice, RBI (0-0); Conor Campbell out at second 2b to ss; James Nitti scored.</div>
+<div class="play"><span class="inning-tag">5th</span> Conor Campbell lined out to ss (0-0).</div>
+<div class="play"><span class="inning-tag">8th</span> Conor Campbell grounded out to 2b (1-2 KKB).</div>
+</div>
+                </td>
+            </tr>
+            <tr class="game-row w" onclick="this.classList.toggle('expanded')">
+                <td class="gl-date">Mar 29</td>
+                <td class="gl-opp">Elizabethtown College</td>
+                <td class="gl-result"><span class="badge-w">W</span> 3-2</td>
+                <td>4</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr class="plays-row w">
+                <td colspan="15">
+                    <div class="plays-wrap"><div class="play"><span class="inning-tag">1st</span> Conor Campbell flied out to rf (2-2 BKFB).</div>
+<div class="play"><span class="inning-tag">2nd</span> Conor Campbell reached on a fielder&#x27;s choice (1-0 B); Anthony Walter out at second ss to 2b.</div>
+<div class="play"><span class="inning-tag">4th</span> Conor Campbell flied out to rf, sacrifice fly, RBI (1-2 KKBFFFF); Jimmy Lundari scored, unearned.</div>
+<div class="play"><span class="inning-tag">6th</span> Conor Campbell singled to shortstop (0-0).</div>
+<div class="play"><span class="inning-tag">6th</span> Logan Mason grounded into double play 3b to 2b to 1b (1-2 FBF); Conor Campbell out on the play.</div>
+<div class="play"><span class="inning-tag">8th</span> Conor Campbell grounded out to c, bunt unassisted (0-1 K).</div>
+</div>
+                </td>
             </tr></tbody>
         </table>
     </div>
@@ -1051,14 +1076,14 @@
         <tr>
             <td class="sched-date">Mar 29</td>
             <td class="sched-opp">at Elizabethtown College (DH)</td>
-            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
-            <td class="sched-box"></td>
+            <td class="sched-result"><span class="badge-l">L</span> 1-5</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/elizabethtown-college/boxscore/6438" target="_blank" class="box-link">Box Score</a></td>
         </tr>
         <tr>
             <td class="sched-date">Mar 29</td>
             <td class="sched-opp">at Elizabethtown College</td>
-            <td class="sched-result"><span class="badge-upcoming">Upcoming</span></td>
-            <td class="sched-box"></td>
+            <td class="sched-result"><span class="badge-w">W</span> 3-2</td>
+            <td class="sched-box"><a href="https://athletics.scranton.edu/sports/baseball/stats/2026/elizabethtown-college/boxscore/6439" target="_blank" class="box-link">Box Score</a></td>
         </tr>
         <tr>
             <td class="sched-date">Mar 31</td>
