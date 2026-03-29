@@ -476,6 +476,14 @@
             .carousel { height: 340px; }
             .photo-grid { grid-template-columns: repeat(2, 1fr); }
             .photo-grid img:first-child { grid-column: span 2; }
+
+            /* Schedule table: fit within viewport without horizontal scroll */
+            #schedule table { width: 100%; table-layout: fixed; }
+            .sched-date { width: 55px; font-size: 0.7rem; }
+            .sched-opp { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            .sched-result { width: 70px; font-size: 0.7rem; }
+            .sched-box { width: 62px; }
+            .box-link { font-size: 0.65rem; padding: 0.2rem 0.35rem; }
         }
     </style>
 </head>
