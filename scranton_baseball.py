@@ -1052,6 +1052,17 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
         {game_log_html}
     </div>
 
+    <!-- Schedule Section -->
+    <div class="section" id="schedule">
+        <div class="section-title">2026 Schedule</div>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead><tr><th>Date</th><th>Opponent</th><th>Result</th><th></th></tr></thead>
+                <tbody>{schedule_rows}</tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- Photos Section -->
     <div class="section" id="photos">
         <div class="section-title">Photos</div>
@@ -1070,17 +1081,6 @@ def generate_html(schedule, campbell_overall, campbell_fielding, campbell_game_l
     <div class="lightbox" id="lightbox">
         <button class="lightbox-close" id="lightboxClose">&times;</button>
         <img id="lightboxImg" src="" alt="">
-    </div>
-
-    <!-- Schedule Section -->
-    <div class="section" id="schedule">
-        <div class="section-title">2026 Schedule</div>
-        <div style="overflow-x: auto;">
-            <table>
-                <thead><tr><th>Date</th><th>Opponent</th><th>Result</th><th></th></tr></thead>
-                <tbody>{schedule_rows}</tbody>
-            </table>
-        </div>
     </div>
 </div>
 
